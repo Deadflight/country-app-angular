@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ContrySearchInputComponent } from "../../components/contry-search-input/contry-search-input.component";
-import { CountryListComponent } from "../../components/country-list/country-list.component";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import { ContrySearchInputComponent } from '../../components/contry-search-input/contry-search-input.component';
+import { CountryListComponent } from '../../components/country-list/country-list.component';
+import { CountryService } from '../../services/country.service';
+import { ICountry } from '../../interfaces/country.interface';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -9,7 +16,23 @@ import { CountryListComponent } from "../../components/country-list/country-list
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ByCapitalPageComponent {
+  countryService = inject(CountryService);
+  countries = signal<ICountry[]>([]);
+  isLoading = signal(false);
+  isError = signal<string | null>(null);
+
   onSearchByCapital(capital: string) {
-    console.log('ByCapitalPageComponent: ', capital);
+    if (this.isLoading()) {
+      return;
+    }
+
+    this.isLoading.set(true);
+    this.isError.set(null);
+    const response = this.countryService.searchByCapital(capital);
+    response.subscribe((countries) => {
+      this.isLoading.set(false);
+
+      this.countries.set(countries);
+    });
   }
 }
