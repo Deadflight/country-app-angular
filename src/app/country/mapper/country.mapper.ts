@@ -6,8 +6,9 @@ export class CountryMapper {
     response: ICountryByCapital
   ): ICountry {
     return {
-      commonName: response.name.common,
-      officialName: response.name.official,
+      commonName: response.translations['spa']?.common || response.name.common,
+      officialName:
+        response.translations['spa']?.official || response.name.official,
       capital: response.capital[0],
       population: response.population,
       region: response.region,
