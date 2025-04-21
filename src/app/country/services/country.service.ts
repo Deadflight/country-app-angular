@@ -57,4 +57,25 @@ export class CountryService {
 
     return response;
   }
+
+  searchCountryByCode(code: string) {
+    const response: Observable<ICountry | undefined> = this.http
+      .get<ICountryByCapital[]>(`${COUNTRY_API_URL}/alpha/${code}`)
+      .pipe(
+        map((response: ICountryByCapital[]) => {
+          const countries =
+            CountryMapper.mapCountryResponseArrayToCountryToArray(response);
+
+          return countries;
+        }),
+        map((countries) => countries.at(0)),
+        catchError((error) => {
+          console.error('Error fetching countries by code:', error);
+          const errResponse = error as HttpErrorResponse;
+          return throwError(() => new Error(errResponse.message));
+        })
+      );
+
+    return response;
+  }
 }
