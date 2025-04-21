@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ICountryByCapital } from '../interfaces/country.service.interfaces';
 import { ICountry } from '../interfaces/country.interface';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, catchError, throwError } from 'rxjs';
 import { CountryMapper } from '../mapper/country.mapper';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1';
@@ -24,6 +24,11 @@ export class CountryService {
             CountryMapper.mapCountryResponseArrayToCountryToArray(response);
 
           return countries;
+        }),
+        catchError((error) => {
+          console.error('Error fetching countries by capital:', error);
+          const errResponse = error as HttpErrorResponse;
+          return throwError(() => new Error(errResponse.message));
         })
       );
 

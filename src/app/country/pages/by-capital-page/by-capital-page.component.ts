@@ -29,10 +29,19 @@ export class ByCapitalPageComponent {
     this.isLoading.set(true);
     this.isError.set(null);
     const response = this.countryService.searchByCapital(capital);
-    response.subscribe((countries) => {
-      this.isLoading.set(false);
-
-      this.countries.set(countries);
+    response.subscribe({
+      next: (countries) => {
+        this.countries.set(countries);
+        this.isLoading.set(false);
+      },
+      error: (error) => {
+        this.isLoading.set(false);
+        this.isError.set(error.message);
+        this.countries.set([]);
+      },
+      complete: () => {
+        this.isLoading.set(false);
+      },
     });
   }
 }
