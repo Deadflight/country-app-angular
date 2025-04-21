@@ -33,6 +33,38 @@
         </td>
       </tr>
       }
+
+      <!-- Error message -->
+      @if (errorMessage()) {
+      <tr>
+        <td colspan="6" class="text-center">
+          <div class="alert alert-danger">
+            {{ errorMessage() }}
+          </div>
+        </td>
+      </tr>
+      }
+
+      <!-- No countries-->
+      @if (isEmpty() && !isLoading()) {
+      <tr>
+        <td colspan="6" class="text-center">
+          <div class="">No hay países que mostrar</div>
+        </td>
+      </tr>
+      }
+
+      <!-- Loading -->
+
+      @if (isLoading()) {
+      <tr>
+        <td colspan="6" class="text-center">
+          <div class="" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </td>
+      </tr>
+      }
     </tbody>
   </table>
 </section>

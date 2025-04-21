@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ICountryByCapital } from '../interfaces/country.service.interfaces';
 import { ICountry } from '../interfaces/country.interface';
-import { map, Observable, catchError, throwError } from 'rxjs';
+import { map, Observable, catchError, throwError, delay } from 'rxjs';
 import { CountryMapper } from '../mapper/country.mapper';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1';
@@ -41,6 +41,7 @@ export class CountryService {
     const response: Observable<ICountry[]> = this.http
       .get<ICountryByCapital[]>(`${COUNTRY_API_URL}/name/${query}`)
       .pipe(
+        delay(3000),
         map((response: ICountryByCapital[]) => {
           const countries =
             CountryMapper.mapCountryResponseArrayToCountryToArray(response);

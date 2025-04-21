@@ -3,10 +3,9 @@
   (search)="query.set($event)"
 ></contry-search-input>
 
-@if (countryResource.error()) {
-<div class="alert alert-danger">
-  {{ countryResource.error() }}
-</div>
-} @if (countryResource.hasValue()) {
-<country-list [countries]="countryResource.value()"></country-list>
-}
+<country-list
+  [countries]="countryResource.value() ?? []"
+  [isLoading]="countryResource.isLoading()"
+  [errorMessage]="countryResource.error()"
+  [isEmpty]="countryResource.value()?.length === 0"
+></country-list>

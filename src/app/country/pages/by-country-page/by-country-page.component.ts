@@ -8,6 +8,8 @@ import {
 import { ContrySearchInputComponent } from '../../components/contry-search-input/contry-search-input.component';
 import { CountryListComponent } from '../../components/country-list/country-list.component';
 import { CountryService } from '../../services/country.service';
+import { rxResource } from '@angular/core/rxjs-interop';
+import { firstValueFrom, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-by-country-page',
@@ -19,17 +21,31 @@ export default class ByCountryPageComponent {
   countryService = inject(CountryService);
   query = signal<string>('');
 
-  countryResource = resource({
+  countryResource = rxResource({
     request: () => ({ query: this.query() }),
-    loader: async ({ request }) => {
+    loader: ({ request }) => {
       const { query } = request;
+
       if (!query) {
-        return [];
+        return of([]);
       }
-      const response = await this.countryService
-        .searchByCountry(query)
-        .toPromise();
-      return response;
+
+      return this.countryService.searchByCountry(query);
     },
   });
+
+  // countryResource = resource({
+  //   request: () => ({ query: this.query() }),
+  //   loader: async ({ request }) => {
+  //     const { query } = request;
+  //     if (!query) {
+  //       return [];
+  //     }
+  //     const response = await firstValueFrom(
+  //       this.countryService.searchByCountry(query)
+  //     );
+
+  //     return response;
+  //   },
+  // });
 }

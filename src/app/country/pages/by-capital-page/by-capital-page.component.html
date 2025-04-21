@@ -1,11 +1,6 @@
 <contry-search-input
   placeHolder="Buscar por capital"
-  (search)="onSearchByCapital($event)"
+  (search)="query.set($event)"
 ></contry-search-input>
 
-@if (isError()) {
-<p class="text-danger">Error: {{ isError() }}</p>
-} @else {
-
-<country-list [countries]="countries()"></country-list>
-}
+<country-list [countries]="countryResource.value() ?? []"></country-list>
