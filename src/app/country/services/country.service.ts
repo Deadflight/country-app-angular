@@ -34,4 +34,26 @@ export class CountryService {
 
     return response;
   }
+
+  searchByCountry(query: string) {
+    query = query.toLowerCase();
+
+    const response: Observable<ICountry[]> = this.http
+      .get<ICountryByCapital[]>(`${COUNTRY_API_URL}/name/${query}`)
+      .pipe(
+        map((response: ICountryByCapital[]) => {
+          const countries =
+            CountryMapper.mapCountryResponseArrayToCountryToArray(response);
+
+          return countries;
+        }),
+        catchError((error) => {
+          console.error('Error fetching countries by country:', error);
+          const errResponse = error as HttpErrorResponse;
+          return throwError(() => new Error(errResponse.message));
+        })
+      );
+
+    return response;
+  }
 }

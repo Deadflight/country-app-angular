@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  resource,
+  signal,
+} from '@angular/core';
 import { ContrySearchInputComponent } from '../../components/contry-search-input/contry-search-input.component';
 import { CountryListComponent } from '../../components/country-list/country-list.component';
+import { CountryService } from '../../services/country.service';
 
 @Component({
   selector: 'app-by-country-page',
@@ -9,5 +16,20 @@ import { CountryListComponent } from '../../components/country-list/country-list
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class ByCountryPageComponent {
-  onSearchByCountry(searchTerm: string) {}
+  countryService = inject(CountryService);
+  query = signal<string>('');
+
+  countryResource = resource({
+    request: () => ({ query: this.query() }),
+    loader: async ({ request }) => {
+      const { query } = request;
+      if (!query) {
+        return [];
+      }
+      const response = await this.countryService
+        .searchByCountry(query)
+        .toPromise();
+      return response;
+    },
+  });
 }

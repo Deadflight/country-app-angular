@@ -1,5 +1,12 @@
 <contry-search-input
   [placeHolder]="'Buscar por país'"
-  (search)="onSearchByCountry($event)"
+  (search)="query.set($event)"
 ></contry-search-input>
-<country-list [countries]="[]"></country-list>
+
+@if (countryResource.error()) {
+<div class="alert alert-danger">
+  {{ countryResource.error() }}
+</div>
+} @if (countryResource.hasValue()) {
+<country-list [countries]="countryResource.value()"></country-list>
+}
