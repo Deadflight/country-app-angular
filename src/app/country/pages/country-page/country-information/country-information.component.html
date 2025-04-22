@@ -66,9 +66,9 @@
       <div class="card-body">
         <h3 class="card-title text-lg text-primary">Zonas horarias</h3>
         <ul class="list-disc list-inside text-secondary">
-          <li *ngFor="let timezone of country().timezones">
-            {{ timezone }}
-          </li>
+          @for (timeZone of country().timezones; track timeZone) {
+          <li>{{ timeZone }}</li>
+          }
         </ul>
       </div>
     </div>
@@ -78,9 +78,9 @@
       <div class="card-body">
         <h3 class="card-title text-lg text-primary">Idiomas</h3>
         <ul class="list-disc list-inside text-secondary">
-          <li *ngFor="let language of country().languages">
-            {{ language }}
-          </li>
+          @for (language of country().languages; track language) {
+          <li>{{ language }}</li>
+          }
         </ul>
       </div>
     </div>
@@ -90,9 +90,11 @@
       <div class="card-body">
         <h3 class="card-title text-lg text-primary">Monedas</h3>
         <ul class="list-disc list-inside text-secondary">
-          <li *ngFor="let currency of country().currencies">
+          @for (currency of country().currencies; track currency) {
+          <li>
             {{ currency }}
           </li>
+          }
         </ul>
       </div>
     </div>
@@ -102,9 +104,11 @@
       <div class="card-body">
         <h3 class="card-title text-lg text-primary">Fronteras</h3>
         <ul class="list-disc list-inside text-secondary">
-          <li *ngFor="let border of country().borders">
+          @for (border of country().borders; track border) {
+          <li>
             {{ border }}
           </li>
+          }
         </ul>
       </div>
     </div>
