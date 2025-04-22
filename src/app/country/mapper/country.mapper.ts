@@ -15,6 +15,12 @@ export class CountryMapper {
       cca2: response.cca2,
       flag: response.flags.png,
       iconFlag: response.flag,
+      currencies: Object.keys(response.currencies),
+      languages: Object.keys(response.languages),
+      borders: response.borders || [],
+      subregion: response.subregion,
+      area: response.area,
+      timezones: response.timezones,
     };
   }
 

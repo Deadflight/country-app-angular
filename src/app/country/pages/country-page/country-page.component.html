@@ -12,10 +12,7 @@
 
 <!-- Información del país -->
 @if (countryResource.hasValue()) {
-<section class="flex flex-col items-center justify-center mt-10">
-  <h1>Información del país</h1>
-  <p>Detalles sobre el país seleccionado.</p>
-
-  <h1>{{ countryResource.value().commonName }}</h1>
-</section>
+<app-country-information
+  [country]="countryResource.value()"
+></app-country-information>
 }

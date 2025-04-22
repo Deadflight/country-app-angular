@@ -7,4 +7,10 @@ export interface ICountry {
   cca2: string;
   flag: string;
   iconFlag: string;
+  currencies: string[];
+  languages: string[];
+  borders: string[];
+  subregion: string;
+  area: number;
+  timezones: string[];
 }

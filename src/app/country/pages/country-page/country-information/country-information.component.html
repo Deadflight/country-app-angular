@@ -1,0 +1,123 @@
+<section class="mx-auto max-w-5xl p-8 bg-base-200 rounded-lg shadow-lg">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-5xl font-bold text-primary mb-4">
+      {{ country().commonName }}
+    </h1>
+    <h2 class="text-2xl font-light text-secondary">
+      {{ country().officialName }}
+    </h2>
+    <div class="mt-4 flex justify-center items-center gap-4">
+      <img
+        [src]="country().flag"
+        [alt]="'Bandera de ' + country().commonName"
+        class="w-20 h-12 rounded shadow-md"
+      />
+      <span class="badge badge-accent text-lg">
+        {{ country().cca2 }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Information -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Capital -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Capital</h3>
+        <p class="text-secondary">{{ country().capital }}</p>
+      </div>
+    </div>
+
+    <!-- Population -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Población</h3>
+        <p class="text-secondary">{{ country().population | number }}</p>
+      </div>
+    </div>
+
+    <!-- Area -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Área</h3>
+        <p class="text-secondary">{{ country().area | number }} km²</p>
+      </div>
+    </div>
+
+    <!-- Region -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Región</h3>
+        <p class="text-secondary">{{ country().region }}</p>
+      </div>
+    </div>
+
+    <!-- Subregion -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Subregión</h3>
+        <p class="text-secondary">{{ country().subregion }}</p>
+      </div>
+    </div>
+
+    <!-- Timezones -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Zonas horarias</h3>
+        <ul class="list-disc list-inside text-secondary">
+          <li *ngFor="let timezone of country().timezones">
+            {{ timezone }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Languages -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Idiomas</h3>
+        <ul class="list-disc list-inside text-secondary">
+          <li *ngFor="let language of country().languages">
+            {{ language }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Currencies -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Monedas</h3>
+        <ul class="list-disc list-inside text-secondary">
+          <li *ngFor="let currency of country().currencies">
+            {{ currency }}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Borders -->
+    <div class="card bg-base-100 shadow-md">
+      <div class="card-body">
+        <h3 class="card-title text-lg text-primary">Fronteras</h3>
+        <ul class="list-disc list-inside text-secondary">
+          <li *ngFor="let border of country().borders">
+            {{ border }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="mt-8 text-center">
+    <a
+      [href]="'https://www.google.com/maps/place/' + country().capital"
+      target="_blank"
+      class="btn btn-primary"
+    >
+      Ver en Google Maps
+    </a>
+  </div>
+</section>
