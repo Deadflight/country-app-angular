@@ -1,6 +1,7 @@
 <contry-search-input
   [placeHolder]="'Buscar por país'"
   (search)="query.set($event)"
+  [initialValue]="query()"
 ></contry-search-input>
 
 <country-list
