@@ -1,6 +1,8 @@
 <contry-search-input
   placeHolder="Buscar por capital"
-  (search)="query.set($event)"
+  (search)="searchByCapital($event)"
+  [debounceTIme]="500"
+  [initialValue]="query()"
 ></contry-search-input>
 
 <country-list [countries]="countryResource.value() ?? []"></country-list>

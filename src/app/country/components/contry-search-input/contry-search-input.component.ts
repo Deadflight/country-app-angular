@@ -3,6 +3,7 @@ import {
   Component,
   effect,
   input,
+  linkedSignal,
   output,
   signal,
 } from '@angular/core';
@@ -16,10 +17,11 @@ import {
 export class ContrySearchInputComponent {
   placeHolder = input.required<string>();
   debounceTIme = input<number>(500);
+  initialValue = input<string>('');
 
   search = output<string>();
 
-  inputValue = signal<string>('');
+  inputValue = linkedSignal<string>(() => this.initialValue());
 
   debounceEffect = effect((onCleanup) => {
     const value = this.inputValue();

@@ -5,6 +5,7 @@
     [placeholder]="placeHolder()"
     autofocus
     #txtSearch
+    [value]="inputValue()"
     (keyup.enter)="onSearchCountry(txtSearch.value)"
     (keyup)="inputValue.set(txtSearch.value)"
   />

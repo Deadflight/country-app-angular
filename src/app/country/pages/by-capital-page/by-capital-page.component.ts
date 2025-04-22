@@ -10,6 +10,7 @@ import { CountryService } from '../../services/country.service';
 import { ICountry } from '../../interfaces/country.interface';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { of } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -20,7 +21,13 @@ import { of } from 'rxjs';
 export class ByCapitalPageComponent {
   countryService = inject(CountryService);
 
-  query = signal<string>('');
+  activatedRoute = inject(ActivatedRoute);
+
+  router = inject(Router);
+
+  queryParam = this.activatedRoute.snapshot.queryParamMap.get('query') ?? '';
+
+  query = signal<string>(this.queryParam);
 
   countryResource = rxResource({
     request: () => ({ query: this.query() }),
@@ -31,9 +38,18 @@ export class ByCapitalPageComponent {
         return of([]);
       }
 
+      this.router.navigate([], {
+        queryParams: { query: query },
+        queryParamsHandling: 'merge',
+      });
+
       return this.countryService.searchByCapital(query);
     },
   });
+
+  searchByCapital = (capital: string) => {
+    this.query.set(capital);
+  };
 
   // countries = signal<ICountry[]>([]);
   // isLoading = signal(false);
