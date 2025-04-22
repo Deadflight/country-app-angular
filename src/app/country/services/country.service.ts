@@ -4,6 +4,7 @@ import { ICountryByCapital } from '../interfaces/country.service.interfaces';
 import { ICountry } from '../interfaces/country.interface';
 import { map, Observable, catchError, throwError, delay, of, tap } from 'rxjs';
 import { CountryMapper } from '../mapper/country.mapper';
+import { Region } from '../interfaces/regions.interface';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1';
 
@@ -14,6 +15,16 @@ export class CountryService {
   private http = inject(HttpClient);
   private queryCacheCapital = new Map<string, ICountry[]>();
   private queryCacheCountry = new Map<string, ICountry[]>();
+  private queryCacheRegion = new Map<Region, ICountry[]>();
+
+  public regions: Region[] = [
+    'Africa',
+    'Americas',
+    'Asia',
+    'Europe',
+    'Oceania',
+    'Antarctic',
+  ];
 
   searchByCapital(query: string) {
     query = query.toLowerCase();
@@ -87,6 +98,33 @@ export class CountryService {
         map((countries) => countries.at(0)),
         catchError((error) => {
           console.error('Error fetching countries by code:', error);
+          const errResponse = error as HttpErrorResponse;
+          return throwError(() => new Error(errResponse.message));
+        })
+      );
+
+    return response;
+  }
+
+  searchByRegion(region: Region) {
+    if (this.queryCacheRegion.has(region)) {
+      return of(this.queryCacheRegion.get(region));
+    }
+
+    const response: Observable<ICountry[]> = this.http
+      .get<ICountryByCapital[]>(`${COUNTRY_API_URL}/region/${region}`)
+      .pipe(
+        map((response: ICountryByCapital[]) => {
+          const countries =
+            CountryMapper.mapCountryResponseArrayToCountryToArray(response);
+
+          return countries;
+        }),
+        tap((countries) => {
+          this.queryCacheRegion.set(region, countries);
+        }),
+        catchError((error) => {
+          console.error('Error fetching countries by region:', error);
           const errResponse = error as HttpErrorResponse;
           return throwError(() => new Error(errResponse.message));
         })

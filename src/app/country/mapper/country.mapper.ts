@@ -9,14 +9,16 @@ export class CountryMapper {
       commonName: response.translations['spa']?.common || response.name.common,
       officialName:
         response.translations['spa']?.official || response.name.official,
-      capital: response.capital[0],
+      capital: response?.capital?.length
+        ? response.capital[0]
+        : 'No capital found',
       population: response.population,
       region: response.region,
       cca2: response.cca2,
       flag: response.flags.png,
       iconFlag: response.flag,
-      currencies: Object.keys(response.currencies),
-      languages: Object.keys(response.languages),
+      currencies: response.currencies ? Object.keys(response.currencies) : [],
+      languages: response.languages ? Object.values(response.languages) : [],
       borders: response.borders || [],
       subregion: response.subregion,
       area: response.area,
