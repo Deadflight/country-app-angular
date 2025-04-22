@@ -2,7 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ICountryByCapital } from '../interfaces/country.service.interfaces';
 import { ICountry } from '../interfaces/country.interface';
-import { map, Observable, catchError, throwError, delay, of } from 'rxjs';
+import { map, Observable, catchError, throwError, delay, of, tap } from 'rxjs';
 import { CountryMapper } from '../mapper/country.mapper';
 
 const COUNTRY_API_URL = 'https://restcountries.com/v3.1';
@@ -12,11 +12,15 @@ const COUNTRY_API_URL = 'https://restcountries.com/v3.1';
 })
 export class CountryService {
   private http = inject(HttpClient);
+  private queryCacheCapital = new Map<string, ICountry[]>();
+  private queryCacheCountry = new Map<string, ICountry[]>();
 
   searchByCapital(query: string) {
     query = query.toLowerCase();
-    console.log('searchByCapital', query);
-    return of([]);
+
+    if (this.queryCacheCapital.has(query)) {
+      return of(this.queryCacheCapital.get(query));
+    }
 
     const response: Observable<ICountry[]> = this.http
       .get<ICountryByCapital[]>(`${COUNTRY_API_URL}/capital/${query}`)
@@ -26,6 +30,9 @@ export class CountryService {
             CountryMapper.mapCountryResponseArrayToCountryToArray(response);
 
           return countries;
+        }),
+        tap((countries) => {
+          this.queryCacheCapital.set(query, countries);
         }),
         catchError((error) => {
           console.error('Error fetching countries by capital:', error);
@@ -40,6 +47,10 @@ export class CountryService {
   searchByCountry(query: string) {
     query = query.toLowerCase();
 
+    if (this.queryCacheCountry.has(query)) {
+      return of(this.queryCacheCountry.get(query));
+    }
+
     const response: Observable<ICountry[]> = this.http
       .get<ICountryByCapital[]>(`${COUNTRY_API_URL}/name/${query}`)
       .pipe(
@@ -49,6 +60,9 @@ export class CountryService {
             CountryMapper.mapCountryResponseArrayToCountryToArray(response);
 
           return countries;
+        }),
+        tap((countries) => {
+          this.queryCacheCountry.set(query, countries);
         }),
         catchError((error) => {
           console.error('Error fetching countries by country:', error);
